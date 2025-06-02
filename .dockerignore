@@ -1,0 +1,35 @@
+# Ignore Git repository files
+.git/
+.gitignore
+
+# Ignore local dependency directories
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Ignore log files and directories
+logs/
+*.log
+npm-debug.log
+yarn-error.log
+
+# Ignore environment variable files
+.env
+backend/.env
+frontend/.env
+
+# Ignore temporary directories
+tmp/
+backend/tmp/
+frontend/tmp/
+
+# Ignore build outputs (if built inside the container)
+frontend/build/
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
