@@ -1,26 +1,34 @@
 services:
-  web:
-    build: ./
-    command: nodemon -L ./bin/www
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/ultimate-tic-tac-toe
+    depends_on:
+      - mongo
+  frontend:
+    build: ./frontend
+    command: npm run dev
     ports:
       - "3000:3000"
     volumes:
-      - ./:/usr/src/app
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://backend:5000
     depends_on:
       - mongo
   mongo:
-    image: mongo
-    command: ["mongod", "--quiet"]
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
-  frontend:
-    build: ./frontend
-    command: npm start
-    ports:
-      - "3001:3000"
-    volumes:
-      - ./frontend:/usr/src/frontend
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
