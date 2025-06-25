@@ -1,0 +1,26 @@
+Authentication:
+api/auth/user
+
+Leaderboard:
+api/leaderboard
+
+Get user's games
+api/users/:userId/games
+
+create new game
+api/games
+
+join game by invite code
+api/games/join/:inviteCode
+
+get game state
+api/games/:id 
+
+make a move
+api/games/:id/moves
+  The guide has this as a very complex thing, I may break this up with helper functions
+
+reset game
+api/games/:id/reset
+  not sure I want this one, it should probably just redirect to a new game
+
