@@ -1,8 +1,10 @@
+const createError = require("http-errors");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+const indexRouter = require("./src/routes/index");
 const testRouter = require("./src/routes/testapi");
 
 const app = express();
@@ -16,6 +18,10 @@ mongoose
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.error(err));
 
+app.set("views", __dirname + "/src/views");
+app.set("view engine", "ejs");
+
+app.use("/", indexRouter);
 app.use("/testapi", testRouter);
 
 app.use(function (req, res, next) {
