@@ -18,7 +18,10 @@ exports.users_create_post = asyncHandler(async (req, res, next) => {
     userData.password = await hashPassword(userData.password);
     const user = new Users(userData);
     await user.save();
-    res.status(201).json(user);
+
+    const userObject = user.toObject();
+    delete userObject.password; // Remove password from the response
+    res.status(201).json(userObject);
   } catch (err) {
     if (err.name === "MongoServerError" && err.code === 11000) {
       return res
