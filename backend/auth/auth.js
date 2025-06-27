@@ -3,21 +3,19 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/users");
 
 exports.jwtAuthenticate = async (req) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return {
-        error: "Authentication failed. Invalid username or password.",
-        status: 401,
-      };
-    }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    return { token, status: 200 };
-  } catch (error) {
-    console.error(error);
-    return { error: "Internal server error.", status: 500 };
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    const error = new Error(
+      "Authentication failed. Invalid username or password."
+    );
+    error.status = 401;
+    throw error;
   }
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  return { token, status: 200 };
 };
 
 exports.jwtAuthorize = async (req, res, next) => {

@@ -35,11 +35,9 @@ exports.users_create_post = asyncHandler(async (req, res, next) => {
 
 // POST request to authenticate a user
 exports.users_login_post = asyncHandler(async (req, res, next) => {
-  const result = await jwtAuthenticate(req);
-  if (result.error) {
-    return res.status(result.status).json({ error: result.error });
-  }
-  res
-    .status(result.status)
-    .json({ token: result.token, username: req.body.username });
+  const token = await jwtAuthenticate(req);
+  res.status(200).json({
+    token: token,
+    username: req.body.username,
+  });
 });
