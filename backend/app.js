@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const indexRouter = require("./routes/index");
 const testRouter = require("./routes/testapi");
+const usersRouter = require("./routes/users");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ mongoose
 
 app.use("/", indexRouter);
 app.use("/testapi", testRouter);
+app.use("/users", usersRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
