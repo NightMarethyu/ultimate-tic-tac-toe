@@ -146,4 +146,50 @@ describe("User API", () => {
     expect(res.body.length).toBeGreaterThan(0);
     expect(res.body[0].username).toBe(adminUser.username);
   });
+
+  it("should allow an admin to delete a user", async () => {
+    const adminUser = {
+      username: "adminuser",
+      email: "admin@test.com",
+      password: "adminpassword",
+      role: "admin",
+    };
+
+    const hashedPassword = await require("../helpers/hash")(adminUser.password);
+    const admin = await Users.create({
+      ...adminUser,
+      password: hashedPassword,
+    });
+
+    const userToDelete = {
+      username: "userToDelete",
+      email: "tempUser@test.com",
+      password: "tempPassword",
+    };
+
+    const hashedUserPassword = await require("../helpers/hash")(
+      userToDelete.password
+    );
+    const user = await Users.create({
+      ...userToDelete,
+      password: hashedUserPassword,
+    });
+
+    const loginRes = await request(app)
+      .post("/users/login")
+      .send({ username: adminUser.username, password: adminUser.password })
+      .expect(200);
+
+    const token = loginRes.body.token;
+
+    const res = await request(app)
+      .delete(`/users/${user._id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(200);
+
+    expect(res.body.message).toBe("User deleted successfully");
+    expect(res.body.user._id).toBe(user._id.toString());
+    const deletedUser = await Users.findById(user._id);
+    expect(deletedUser).toBeNull();
+  });
 });

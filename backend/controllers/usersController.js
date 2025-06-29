@@ -35,9 +35,17 @@ exports.users_create_post = asyncHandler(async (req, res, next) => {
 
 // POST request to authenticate a user
 exports.users_login_post = asyncHandler(async (req, res, next) => {
-  const token = await jwtAuthenticate(req);
+  const { token } = await jwtAuthenticate(req);
   res.status(200).json({
     token: token,
     username: req.body.username,
+  });
+});
+
+exports.users_delete = asyncHandler(async (req, res, next) => {
+  const user = await Users.findByIdAndDelete(req.params.id);
+  res.json({
+    message: "User deleted successfully",
+    user: user,
   });
 });

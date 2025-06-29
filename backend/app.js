@@ -1,8 +1,8 @@
+require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 //const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
 
 const indexRouter = require("./routes/index");
 const testRouter = require("./routes/testapi");

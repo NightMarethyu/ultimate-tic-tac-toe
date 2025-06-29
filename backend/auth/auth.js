@@ -43,3 +43,20 @@ exports.isAdmin = (req, res, next) => {
   }
   next();
 };
+
+exports.isUserOrAdmin = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    if (req.user.isAdmin() || user._id.equals(req.user._id)) {
+      return next();
+    } else {
+      return res.status(403).json({ message: "Access denied." });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
