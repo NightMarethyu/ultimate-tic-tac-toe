@@ -7,6 +7,7 @@ const cors = require("cors");
 const indexRouter = require("./routes/index");
 const testRouter = require("./routes/testapi");
 const usersRouter = require("./routes/users");
+const gamesRouter = require("./routes/games");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use("/", indexRouter);
 app.use("/testapi", testRouter);
 app.use("/users", usersRouter);
+app.use("/games", gamesRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
