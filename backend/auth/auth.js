@@ -60,3 +60,25 @@ exports.isUserOrAdmin = async (req, res, next) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+exports.jwtOptional = async (req, res, next) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.split(" ")[0] === "Bearer"
+  ) {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id);
+
+      if (user) {
+        req.user = user; // Attach user if found
+      }
+    } catch (err) {
+      // If token is invalid or expired, we don't care.
+      // We just won't attach a user.
+      console.error("Optional auth error (can be ignored):", err.message);
+    }
+  }
+  next(); // Always proceed to the next middleware/controller
+};

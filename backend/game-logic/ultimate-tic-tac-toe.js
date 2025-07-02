@@ -18,10 +18,6 @@ function checkSmallBoardWin(board, player) {
   return false;
 }
 
-function determineNextActiveBoard(squareIndex) {
-  return squareIndex;
-}
-
 function rebuildGameState(moves) {
   const board = Array(81).fill(null);
   const mainBoard = Array(9).fill(null);
@@ -65,12 +61,16 @@ function rebuildGameState(moves) {
   };
 }
 
-function validateMove(currentMoves, newMove, playerMovingId, gameDoc) {
+function validateMove(currentMoves, newMove, playerMoving, gameDoc) {
   if (gameDoc.status !== "in_progress") {
     return { isValid: false, message: "Game is already over" };
   }
-  if (gameDoc.currentPlayer.toString() !== playerMovingId) {
-    return { isValid: false, message: "Not your turn" };
+  if (gameDoc.gameType.toString() === "multiplayer" && playerMoving) {
+    // Only enforce player check if a user is authenticated
+    if (gameDoc.currentPlayer.toString() !== playerMoving._id.toString()) {
+      console.log("Not your turn");
+      return { isValid: false, message: "Not your turn" };
+    }
   }
 
   const currentState = rebuildGameState(currentMoves);

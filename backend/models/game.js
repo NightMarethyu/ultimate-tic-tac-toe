@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const gameSchema = new Schema(
   {
-    player: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    players: [{ type: Schema.Types.ObjectId, ref: "User" }],
     gameType: {
       type: String,
       enum: ["single_player", "multiplayer"],

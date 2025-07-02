@@ -8,6 +8,10 @@ const jwtAuthenticate = require("../auth/auth").jwtAuthenticate;
 // Only accessible by admin users
 exports.users_list = asyncHandler(async (req, res, next) => {
   const users = await Users.find();
+  for (let user of users) {
+    user = user.toObject();
+    delete user.password; // Remove password from the response
+  }
   res.json(users);
 });
 

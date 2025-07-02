@@ -8,10 +8,7 @@ let mongoServer;
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri(), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(mongoServer.getUri(), {});
 });
 
 afterAll(async () => {
@@ -94,5 +91,62 @@ describe("Games API", () => {
 
     const deletedGame = await Games.findById(game._id);
     expect(deletedGame).toBeNull();
+  });
+
+  it("should make a move in the game", async () => {
+    const game = new Games({
+      gameType: "single_player",
+      currentPlayer: "60c72b2f9b1d8c001c8e4f1a", // Mock user ID
+    });
+    await game.save();
+
+    const move = { move: "Xa5" }; // Player X moves to square 5 in board a
+    const res = await request(app)
+      .post(`/games/${game._id}/move`)
+      .send(move)
+      .expect(200);
+
+    expect(res.body.moves).toContain("Xa5");
+    expect(res.body.currentPlayer).toBe("60c72b2f9b1d8c001c8e4f1a");
+  });
+
+  it("should return 400 for invalid move", async () => {
+    const game = new Games({
+      gameType: "multiplayer",
+      currentPlayer: "60c72b2f9b1d8c001c8e4f1a", // Mock user ID
+    });
+    await game.save();
+
+    const move = { move: "Xa5" }; // Player X moves to square 5 in board a
+    await request(app).post(`/games/${game._id}/move`).send(move).expect(200);
+
+    // Try to make an invalid move (not player's turn)
+    const invalidMove = { move: "Oa6" }; // Player O tries to move
+    const res = await request(app)
+      .post(`/games/${game._id}/move`)
+      .send(invalidMove)
+      .expect(400);
+
+    expect(res.body.message).toBe("Move is not in the correct active board");
+  });
+
+  it("should return 400 for invalid move (not player's turn)", async () => {
+    const game = new Games({
+      gameType: "multiplayer",
+      currentPlayer: "60c72b2f9b1d8c001c8e4f1a", // Mock user ID
+    });
+    await game.save();
+
+    const move = { move: "Xa5" }; // Player X moves to square 5 in board a
+    await request(app).post(`/games/${game._id}/move`).send(move).expect(200);
+
+    // Try to make an invalid move (not player's turn)
+    const invalidMove = { move: "Xa6" }; // Player O tries to move
+    const res = await request(app)
+      .post(`/games/${game._id}/move`)
+      .send(invalidMove)
+      .expect(400);
+
+    expect(res.body.message).toBe("Not your turn.");
   });
 });
