@@ -17,6 +17,7 @@ exports.users_list = asyncHandler(async (req, res, next) => {
 
 // POST request to create a new user
 exports.users_create_post = asyncHandler(async (req, res, next) => {
+  console.log("Creating user:", req.body);
   try {
     var userData = req.body;
     userData.password = await hashPassword(userData.password);
@@ -27,6 +28,7 @@ exports.users_create_post = asyncHandler(async (req, res, next) => {
     delete userObject.password; // Remove password from the response
     res.status(201).json(userObject);
   } catch (err) {
+    console.error("Error creating user:", err);
     if (err.name === "MongoServerError" && err.code === 11000) {
       return res
         .status(400)

@@ -14,11 +14,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, { username, password }
-      );
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const response = await axios.post(`${apiUrl}/users/login`, { username, password }); // Should be using `import.meta.env.VITE_API_URL/users/signup` but it's not working that way
       login(response.data.username, response.data.token);
       navigate("/");
     } catch (err) {
+      console.error(err);
       setError("Failed to login. Please check your credentials.");
     }
   };
@@ -58,8 +59,7 @@ const Login = () => {
               />
             </div>
             <div className="inputBx">
-              <input type="submit"
-                value="Login" onSubmit={handleSubmit} />
+              <input type="submit" value="Login" />
             </div>
             <div className="inputBx">
               <button onClick={() => navigate("/signup")}>Sign up</button>

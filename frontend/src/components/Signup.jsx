@@ -23,9 +23,12 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/users/signup`, userData);
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      await axios.post(`${apiUrl}/users/signup`, userData); // Should be using `import.meta.env.VITE_API_URL/users/signup` but it's not working that way
+      // Redirect to login page after successful signup
       navigate('/login');
     } catch (error) {
+      console.error(error);
       setError('Failed to sign up. Please try again.');
     }
   };

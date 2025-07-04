@@ -11,7 +11,16 @@ const gamesRouter = require("./routes/games");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// It's crucial to specify the origin for security in production
+const isDevelopment = process.env.NODE_ENV === "development";
+const allowedOrigins = isDevelopment ? "http://localhost:3500" : "none";
+
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true, // This allows cookies to be sent
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/", indexRouter);
