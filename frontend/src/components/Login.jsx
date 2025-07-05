@@ -4,6 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import "../stylesheets/login.css";
 
+/**
+ * Login React component for user authentication.
+ *
+ * Renders a login form that allows users to enter their username and password.
+ * On successful login, the user is redirected to the home page.
+ * If the user is already authenticated, they are automatically redirected.
+ * Displays error messages on failed login attempts.
+ * Provides a button to navigate to the signup page.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered login form component.
+ */
 const Login = () => {
   const { user, login } = useAuth();
   const [username, setUsername] = useState("");

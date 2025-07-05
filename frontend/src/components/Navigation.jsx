@@ -2,6 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
+/**
+ * Navigation component renders the main navigation bar for the Ultimate Tic Tac Toe application.
+ * 
+ * - Displays the app brand and navigation links.
+ * - Shows "Home" link for all users.
+ * - If a user is authenticated:
+ *   - Greets the user by username.
+ *   - Provides a "Logout" button.
+ * - If no user is authenticated:
+ *   - Provides "Login" and "Signup" links.
+ * 
+ * Utilizes the `useAuth` hook to access authentication state and logout functionality.
+ * Uses React Router's `Link` component for navigation.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered navigation bar.
+ */
 const Navigation = () => {
   const { user, logout } = useAuth();
 

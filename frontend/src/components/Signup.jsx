@@ -4,6 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 import '../stylesheets/login.css';
 
+/**
+ * Signup React component for user registration.
+ *
+ * Renders a signup form that collects username, password, email, first name, and last name.
+ * On successful signup, redirects the user to the login page.
+ * Displays an error message if signup fails.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered signup form component.
+ *
+ * @example
+ * <Signup />
+ */
 const Signup = () => {
   const [userData, setUserData] = useState({
     username: '',

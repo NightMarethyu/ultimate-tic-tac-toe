@@ -2,6 +2,16 @@ import React from "react";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * HomePage component displays the main landing page for the application.
+ * 
+ * - If a user is authenticated, it shows the username and a logout button.
+ * - If no user is authenticated, it displays a greeting and a login button.
+ * - Regardless of authentication, it shows disabled "New Game" and "Join Game" buttons as placeholders.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered HomePage component.
+ */
 const HomePage = () => {
   const { user, login, logout } = useAuth();
   const navigate = useNavigate();
